@@ -31,13 +31,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
       // delete category by id
     @Override
-    public boolean deleteCategories(long categoryId) {
-        Optional<Category> category =categoryRepo.findById(categoryId);
-        if (category.isPresent()) {
-            categoryRepo.delete(category.get());
-            return true;
-        }
-        return false;
+    public void deleteCategories(long categoryId) {
+        Category category =categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category with ID " + categoryId + " not found"));
     }
     //update category
     @Override

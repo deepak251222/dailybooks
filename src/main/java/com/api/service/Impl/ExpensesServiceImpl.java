@@ -43,10 +43,9 @@ public class ExpensesServiceImpl implements ExpensesService {
     }
 // delete expenses
     @Override
-    public boolean deleteExpenses(long expensesId) {
-        Expenses expense = expensesRepo.findById(expensesId).orElseThrow(()->new ResourceNotFoundException("Category with ID  " + expensesId + " not found"));
+    public void deleteExpenses(long expensesId) {
+        Expenses expense = expensesRepo.findById(expensesId).orElseThrow(()->new ResourceNotFoundException("Expense with ID  " + expensesId + " not found"));
         expensesRepo.delete(expense);
-        return true;
     }
 // update expenses
     @Override

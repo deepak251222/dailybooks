@@ -14,11 +14,10 @@ import java.util.List;
 public class CategoryController {
     @Autowired
         private  CategoryServiceImpl categoryService;
-
         @PostMapping
-        public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+        public ResponseEntity<String> createCategory(@RequestBody Category category) {
             Category createdCategory = categoryService.createCategory(category);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Category Created Successful");
         }
         @GetMapping("/{categoryId}")
         public ResponseEntity<Category> getCategory(@PathVariable long categoryId) {
@@ -26,19 +25,15 @@ public class CategoryController {
             return ResponseEntity.ok(category);
         }
         @DeleteMapping("/{categoryId}")
-        public ResponseEntity<Void> deleteCategory(@PathVariable long categoryId) {
-            boolean deleted = categoryService.deleteCategories(categoryId);
-            if (deleted) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.notFound().build();
+        public ResponseEntity<String> deleteCategory(@PathVariable long categoryId) {
+                 categoryService.deleteCategories(categoryId);
+                return ResponseEntity.status(HttpStatus.OK).body("Category Delete SuccessFul  : " + categoryId);
             }
-        }
         @PutMapping("/{categoryId}")
-        public ResponseEntity<Category> updateCategory(@RequestBody Category updatedCategory, @PathVariable long categoryId) {
+        public ResponseEntity<String> updateCategory(@RequestBody Category updatedCategory, @PathVariable long categoryId) {
             System.out.println(updatedCategory.toString());
             Category category = categoryService.updateCategory(updatedCategory, categoryId);
-            return ResponseEntity.ok(category);
+            return ResponseEntity.status(HttpStatus.OK).body("Category Update SuccessFul");
         }
         @GetMapping
         public ResponseEntity<List<Category>> getAllCategories() {

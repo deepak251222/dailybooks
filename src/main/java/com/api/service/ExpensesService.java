@@ -14,7 +14,7 @@ public interface ExpensesService {
 
     public Expenses createExpenses(Expenses expenses, MultipartFile file) throws IOException;
 
-    public boolean deleteExpenses(long expensesId);
+    public void deleteExpenses(long expensesId);
 
     public Expenses updateExpenses(Expenses expenses, long expensesId,MultipartFile file)throws IOException;
 

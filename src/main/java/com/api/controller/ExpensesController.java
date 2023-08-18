@@ -22,31 +22,27 @@ public class ExpensesController {
             return ResponseEntity.ok(expenses);
         }
         @PostMapping
-        public ResponseEntity<Expenses> createExpenses(
+        public ResponseEntity<String> createExpenses(
                 @ModelAttribute Expenses expenses,
                 @RequestParam(value = "file", required = false) MultipartFile file
         ) throws IOException {
             Expenses createdExpenses = expensesService.createExpenses(expenses, file);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdExpenses);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Expenses Create Successful");
         }
 
         @DeleteMapping("/{expensesId}")
-        public ResponseEntity<Void> deleteExpenses(@PathVariable long expensesId) {
-            boolean deleted = expensesService.deleteExpenses(expensesId);
-            if (deleted) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+        public ResponseEntity<?> deleteExpenses(@PathVariable long expensesId) {
+            expensesService.deleteExpenses(expensesId);
+           return ResponseEntity.status(HttpStatus.OK).body("Expenses Delete Successful   : " + expensesId);
         }
     @PutMapping("/{expensesId}")
-        public ResponseEntity<Expenses> updateExpenses(
+        public ResponseEntity<String> updateExpenses(
                 @ModelAttribute Expenses expensesUpdate,
                 @PathVariable long expensesId,
                 @RequestParam(value = "file", required = false) MultipartFile file
         ) throws IOException {
             Expenses updatedExpenses = expensesService.updateExpenses(expensesUpdate, expensesId, file);
-            return ResponseEntity.ok(updatedExpenses);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Expenses Update Successful");
         }
     @GetMapping
     public ResponseEntity<List<Expenses>> getExpenses() throws Exception{
