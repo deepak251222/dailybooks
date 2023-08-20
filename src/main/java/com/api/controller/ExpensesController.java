@@ -21,7 +21,7 @@ public class ExpensesController {
                 Expenses expenses = expensesService.getExpenses(expensesId);
             return ResponseEntity.ok(expenses);
         }
-        @PostMapping
+        @PostMapping("/create")
         public ResponseEntity<String> createExpenses(
                 @ModelAttribute Expenses expenses,
                 @RequestParam(value = "file", required = false) MultipartFile file
