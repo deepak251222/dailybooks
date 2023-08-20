@@ -21,8 +21,8 @@ public class ExpensesController {
                 Expenses expenses = expensesService.getExpenses(expensesId);
             return ResponseEntity.ok(expenses);
         }
-        //@PostMapping("/create")
-        @RequestMapping(value = "/create", method = RequestMethod.POST)
+
+        @PostMapping("/create")
         public ResponseEntity<String> createExpenses(
                 @ModelAttribute Expenses expenses,
                 @RequestParam(value = "file", required = false) MultipartFile file
@@ -30,7 +30,6 @@ public class ExpensesController {
             Expenses createdExpenses = expensesService.createExpenses(expenses, file);
             return ResponseEntity.status(HttpStatus.CREATED).body("Expenses Create Successful");
         }
-
         @DeleteMapping("/delete/{expensesId}")
         public ResponseEntity<?> deleteExpenses(@PathVariable long expensesId) {
             expensesService.deleteExpenses(expensesId);
