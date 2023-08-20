@@ -21,13 +21,13 @@ public class Expenses {
          private long expensesId;
          @DateTimeFormat(pattern = "yyyy-MM-dd")
          private Date date;
-         private double expenseAmount;
+         private long expenseAmount;
          private String expenseCategory;
          @Nullable
          @Lob
          private String files;
          private String notes;
-         private double tax;
+         private long tax;
          private String vendors;
 
 }
