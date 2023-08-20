@@ -23,7 +23,6 @@ public class Expenses {
          private Date date;
          private long expenseAmount;
          private String expenseCategory;
-         @Nullable
          @Lob
          private String files;
          private String notes;
