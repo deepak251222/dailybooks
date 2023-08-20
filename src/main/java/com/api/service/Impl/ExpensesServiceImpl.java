@@ -5,11 +5,13 @@ import com.api.dao.ExpensesRepo;
 import com.api.service.ExpensesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ExpensesServiceImpl implements ExpensesService {
@@ -27,21 +29,37 @@ public class ExpensesServiceImpl implements ExpensesService {
         return expense;
     }
     // new create expenses
+//    @Override
+//    public Expenses createExpenses(Expenses expenses, MultipartFile file) throws IOException {
+//        byte[] bytes = file.getBytes();
+//        String originalFilename = file.getOriginalFilename();
+//        String filePath =IMAGE_DIR + originalFilename;
+//        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+//            fos.write(bytes);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//           throw  new ResourceNotFoundException("Error into file uploading @!");
+//        }
+//        expenses.setFiles(filePath);
+//        return expensesRepo.save(expenses);
+//    }
     @Override
     public Expenses createExpenses(Expenses expenses, MultipartFile file) throws IOException {
-        byte[] bytes = file.getBytes();
-        String originalFilename = file.getOriginalFilename();
-        String filePath =IMAGE_DIR + originalFilename;
-        try (FileOutputStream fos = new FileOutputStream(filePath)) {
-            fos.write(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-           throw  new ResourceNotFoundException("Error into file uploading @!");
+        try {
+        if (file != null && !file.isEmpty()) {
+            String originalFilename = file.getOriginalFilename();
+            expenses.setFiles(originalFilename);
+        }else{
+            expenses.setFiles(null);
         }
-        expenses.setFiles(filePath);
-        return expensesRepo.save(expenses);
+
+            return expensesRepo.save(expenses);
+        } catch (DataAccessException e) {
+            throw new ResourceNotFoundException("Error while saving expenses data.");
+        }
     }
-// delete expenses
+
+    // delete expenses
     @Override
     public void deleteExpenses(long expensesId) {
         Expenses expense = expensesRepo.findById(expensesId).orElseThrow(()->new ResourceNotFoundException("Expense with ID  " + expensesId + " not found"));
@@ -61,8 +79,8 @@ public class ExpensesServiceImpl implements ExpensesService {
             expenses.setVendors(expensesUpdate.getVendors());
             if (file != null && !file.isEmpty()) {
                 String originalFilename = file.getOriginalFilename();
-                String filePath =IMAGE_DIR + originalFilename;
-                expenses.setFiles(filePath);
+               // String filePath =IMAGE_DIR + originalFilename;
+                expenses.setFiles(originalFilename);
             }
             return expensesRepo.save(expenses);
         }
