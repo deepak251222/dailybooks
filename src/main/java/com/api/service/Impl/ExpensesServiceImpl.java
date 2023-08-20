@@ -29,34 +29,34 @@ public class ExpensesServiceImpl implements ExpensesService {
         return expense;
     }
     // new create expenses
-//    @Override
-//    public Expenses createExpenses(Expenses expenses, MultipartFile file) throws IOException {
-//        byte[] bytes = file.getBytes();
-//        String originalFilename = file.getOriginalFilename();
-//        String filePath =IMAGE_DIR + originalFilename;
-//        try (FileOutputStream fos = new FileOutputStream(filePath)) {
-//            fos.write(bytes);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//           throw  new ResourceNotFoundException("Error into file uploading @!");
-//        }
-//        expenses.setFiles(filePath);
-//        return expensesRepo.save(expenses);
-//    }
     @Override
     public Expenses createExpenses(Expenses expenses, MultipartFile file) throws IOException {
-        try {
-        if (file != null && !file.isEmpty()) {
-            String originalFilename = file.getOriginalFilename();
-            expenses.setFiles(originalFilename);
-        }else{
-            expenses.setFiles("empty");
+        byte[] bytes = file.getBytes();
+        String originalFilename = file.getOriginalFilename();
+        String filePath =IMAGE_DIR + originalFilename;
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            fos.write(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+           throw  new ResourceNotFoundException("Error into file uploading @!");
         }
-            return expensesRepo.save(expenses);
-        } catch (DataAccessException e) {
-            throw new ResourceNotFoundException("Error while saving expenses data.");
-        }
+        expenses.setFiles(filePath);
+        return expensesRepo.save(expenses);
     }
+//    @Override
+//    public Expenses createExpenses(Expenses expenses, MultipartFile file) throws IOException {
+//        try {
+//        if (file != null && !file.isEmpty()) {
+//            String originalFilename = file.getOriginalFilename();
+//            expenses.setFiles(originalFilename);
+//        }else{
+//            expenses.setFiles("empty");
+//        }
+//            return expensesRepo.save(expenses);
+//        } catch (DataAccessException e) {
+//            throw new ResourceNotFoundException("Error while saving expenses data.");
+//        }
+//    }
 
     // delete expenses
     @Override
