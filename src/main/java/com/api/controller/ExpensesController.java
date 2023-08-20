@@ -16,12 +16,13 @@ public class ExpensesController {
       @Autowired
         private  ExpensesServiceImpl expensesService;
 
-        @GetMapping("/{expensesId}")
+        @GetMapping("/getById/{expensesId}")
         public ResponseEntity<?> getExpenses(@PathVariable long expensesId) throws Exception{
                 Expenses expenses = expensesService.getExpenses(expensesId);
             return ResponseEntity.ok(expenses);
         }
-        @PostMapping("/create")
+        //@PostMapping("/create")
+        @RequestMapping(value = "/create", method = RequestMethod.POST)
         public ResponseEntity<String> createExpenses(
                 @ModelAttribute Expenses expenses,
                 @RequestParam(value = "file", required = false) MultipartFile file
@@ -30,12 +31,12 @@ public class ExpensesController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Expenses Create Successful");
         }
 
-        @DeleteMapping("/{expensesId}")
+        @DeleteMapping("/delete/{expensesId}")
         public ResponseEntity<?> deleteExpenses(@PathVariable long expensesId) {
             expensesService.deleteExpenses(expensesId);
            return ResponseEntity.status(HttpStatus.OK).body("Expenses Delete Successful   : " + expensesId);
         }
-    @PutMapping("/{expensesId}")
+    @PutMapping("/update/{expensesId}")
         public ResponseEntity<String> updateExpenses(
                 @ModelAttribute Expenses expensesUpdate,
                 @PathVariable long expensesId,
