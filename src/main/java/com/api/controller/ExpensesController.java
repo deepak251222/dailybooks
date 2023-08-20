@@ -16,32 +16,26 @@ public class ExpensesController {
       @Autowired
         private  ExpensesServiceImpl expensesService;
 
-        @GetMapping("/getById/{expensesId}")
+        @GetMapping("/{expensesId}")
         public ResponseEntity<?> getExpenses(@PathVariable long expensesId) throws Exception{
                 Expenses expenses = expensesService.getExpenses(expensesId);
             return ResponseEntity.ok(expenses);
         }
-
-    @PostMapping("/create")
-    public ResponseEntity<String> createExpenses(
-            @ModelAttribute Expenses expenses,
-            @RequestParam(value = "file", required = false) MultipartFile file) {
-        try {
+        @PostMapping("/create")
+        public ResponseEntity<String> createExpenses(
+                @ModelAttribute Expenses expenses,
+                @RequestParam(value = "file", required = false) MultipartFile file
+        ) throws IOException {
             Expenses createdExpenses = expensesService.createExpenses(expenses, file);
             return ResponseEntity.status(HttpStatus.CREATED).body("Expenses Create Successful");
-        } catch (Exception e) {
-            e.printStackTrace(); // Log the exception for debugging
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
         }
-    }
 
-
-    @DeleteMapping("/delete/{expensesId}")
+        @DeleteMapping("/{expensesId}")
         public ResponseEntity<?> deleteExpenses(@PathVariable long expensesId) {
             expensesService.deleteExpenses(expensesId);
            return ResponseEntity.status(HttpStatus.OK).body("Expenses Delete Successful   : " + expensesId);
         }
-    @PutMapping("/update/{expensesId}")
+    @PutMapping("/{expensesId}")
         public ResponseEntity<String> updateExpenses(
                 @ModelAttribute Expenses expensesUpdate,
                 @PathVariable long expensesId,
